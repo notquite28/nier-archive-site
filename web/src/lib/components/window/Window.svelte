@@ -62,11 +62,6 @@
         windowManager.closeWindow(win.id);
     }
 
-    function handleMinimize() {
-        playSound('click');
-        windowManager.minimizeWindow(win.id);
-    }
-
     $effect(() => {
         if (browser) {
             if (isDragging || isResizing) {
@@ -99,11 +94,6 @@
             <span class="window-title">{win.title}</span>
             <div class="window-controls">
                 <button 
-                    class="control-btn minimize" 
-                    onclick={handleMinimize}
-                    aria-label="Minimize"
-                >_</button>
-                <button 
                     class="control-btn close" 
                     onclick={handleClose}
                     aria-label="Close"
@@ -115,7 +105,7 @@
             {#if children}
                 {@render children()}
             {:else}
-                {win.content}
+                {@html win.content}
             {/if}
         </div>
         

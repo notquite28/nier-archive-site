@@ -15,10 +15,10 @@
     }
 
     const commands: Command[] = [
-        { id: 'whoami', label: 'whoami', title: 'UNIT PROFILE', width: 400, height: 380 },
-        { id: 'projects', label: 'projects', title: 'DATA FRAGMENTS', width: 450, height: 400 },
-        { id: 'transmissions', label: 'transmissions', title: 'TRANSMISSIONS', width: 400, height: 350 },
-        { id: 'network', label: 'network', title: 'NETWORK', width: 350, height: 350 }
+        { id: 'whoami', label: 'whoami', title: 'UNIT PROFILE', width: 500, height: 480 },
+        { id: 'projects', label: 'projects', title: 'DATA FRAGMENTS', width: 550, height: 500 },
+        { id: 'transmissions', label: 'transmissions', title: 'TRANSMISSIONS', width: 500, height: 450 },
+        { id: 'network', label: 'network', title: 'NETWORK', width: 450, height: 420 }
     ];
 
     let bootComplete = $state(false);

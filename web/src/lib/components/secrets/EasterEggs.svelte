@@ -33,17 +33,17 @@
             id: 'secret-konami',
             title: 'CLASSIFIED',
             content: `
-                <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #ffe66d; margin-bottom: 16px;">ACCESS GRANTED</h3>
-                    <p style="color: #CEC5B4; margin-bottom: 12px;">You've discovered a secret.</p>
+                <div style="text-align: center; padding: 20px; font-family: 'Press Start 2P', monospace;">
+                    <h3 style="color: #ffe66d; font-size: 12px; margin-bottom: 16px;">ACCESS GRANTED</h3>
+                    <p style="color: #CEC5B4; font-size: 10px; margin-bottom: 12px;">You've discovered a secret.</p>
                     <p style="color: #888; font-size: 8px;">The Archive recognizes your dedication.</p>
-                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;"> Achievement Unlocked: Old School</p>
+                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;">Achievement Unlocked: Old School</p>
                 </div>
             `,
             x: 200,
             y: 150,
-            width: 350,
-            height: 250
+            width: 400,
+            height: 280
         });
     }
 
@@ -68,17 +68,17 @@
             id: 'secret-click',
             title: 'UNIT RECOGNIZED',
             content: `
-                <div style="text-align: center; padding: 20px;">
-                    <h3 style="color: #ffe66d; margin-bottom: 16px;">PERSISTENCE DETECTED</h3>
-                    <p style="color: #CEC5B4; margin-bottom: 12px;">Your determination has been noted.</p>
+                <div style="text-align: center; padding: 20px; font-family: 'Press Start 2P', monospace;">
+                    <h3 style="color: #ffe66d; font-size: 12px; margin-bottom: 16px;">PERSISTENCE DETECTED</h3>
+                    <p style="color: #CEC5B4; font-size: 10px; margin-bottom: 12px;">Your determination has been noted.</p>
                     <p style="color: #888; font-size: 8px;">The Archive remembers all who explore deeply.</p>
-                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;"> Achievement Unlocked: Clicker</p>
+                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;">Achievement Unlocked: Clicker</p>
                 </div>
             `,
             x: 250,
             y: 200,
-            width: 350,
-            height: 250
+            width: 400,
+            height: 280
         });
     }
 

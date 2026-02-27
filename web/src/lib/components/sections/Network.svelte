@@ -1,7 +1,7 @@
 <script lang="ts">
     import { links } from '$lib/data/links';
     
-    $: linkList = links;
+    let linkList = $derived(links);
 </script>
 
 <div class="section network">
@@ -27,87 +27,95 @@
 
 <style>
     .section {
-        color: #CEC5B4;
+        color: #454138;
     }
 
     h2 {
-        font-size: 12px;
-        color: #00ff88;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #4a4a6a;
+        font-size: 1rem;
+        color: #454138;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 0.1rem solid #bab5a1;
+        text-transform: uppercase;
+        letter-spacing: 0.3rem;
+        font-weight: normal;
     }
 
     .intro {
-        font-size: 9px;
-        color: #888;
-        margin-bottom: 16px;
+        font-size: 0.8rem;
+        color: #454138;
+        margin-bottom: 1rem;
     }
 
     .link-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        margin-bottom: 20px;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .link-card {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        background: #0f0f1a;
-        border: 2px solid #3a3a5a;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: #d1cdb7;
+        border: 0.1rem solid #bab5a1;
         text-decoration: none;
-        transition: border-color 0.2s, background 0.2s;
+        transition: all 0.2s;
+        color: #454138;
     }
 
     .link-card:hover {
-        border-color: #ff6b6b;
-        background: rgba(255, 107, 107, 0.05);
+        box-shadow: 0.2em 0.2em 0.1em 0 #bab5a1;
     }
 
     .link-icon {
-        font-size: 16px;
+        font-size: 1rem;
     }
 
     .link-name {
         flex: 1;
-        font-size: 9px;
-        color: #CEC5B4;
+        font-size: 0.8rem;
+        color: #454138;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
     }
 
     .link-arrow {
-        font-size: 10px;
-        color: #4a4a6a;
+        font-size: 0.8rem;
+        color: #bab5a1;
     }
 
     .link-card:hover .link-arrow {
-        color: #ff6b6b;
+        color: #454138;
     }
 
     .contact {
-        padding: 16px;
-        background: #0f0f1a;
-        border-left: 3px solid #ffe66d;
+        padding: 1rem;
+        background: #d1cdb7;
+        border-left: 0.2rem solid #454138;
     }
 
     .contact h3 {
-        font-size: 10px;
-        color: #ffe66d;
-        margin-bottom: 8px;
+        font-size: 0.85rem;
+        color: #454138;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+        font-weight: normal;
     }
 
     .contact p {
-        font-size: 9px;
-        color: #888;
-        margin-bottom: 8px;
+        font-size: 0.8rem;
+        color: #454138;
+        margin-bottom: 0.5rem;
     }
 
     .contact code {
-        font-size: 9px;
-        color: #00ff88;
-        background: rgba(0, 255, 136, 0.1);
-        padding: 4px 8px;
+        font-size: 0.8rem;
+        color: #454138;
+        background: #bab5a1;
+        padding: 0.25rem 0.5rem;
     }
 </style>

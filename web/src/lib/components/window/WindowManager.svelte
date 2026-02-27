@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { windowManager } from '$lib/stores/windows';
+    import { windowManager, sanitizeHtml } from '$lib/stores/windows';
     import Window from './Window.svelte';
     import Whoami from '../sections/Whoami.svelte';
     import Projects from '../sections/Projects.svelte';
@@ -21,7 +21,7 @@
             {:else if win.id === 'network'}
                 <Network />
             {:else}
-                {@html win.content}
+                {@html sanitizeHtml(win.content)}
             {/if}
         </Window>
     {/each}

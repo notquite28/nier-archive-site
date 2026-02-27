@@ -1,15 +1,37 @@
 const { WebSocketServer } = require('ultimate-ws');
 
-const wss = new WebSocketServer({ port: 3001 });
+const PORT = process.env.WS_PORT || 3001;
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['http://localhost:5173', 'http://localhost:4173', 'https://yourdomain.com'];
+
+const wss = new WebSocketServer({ port: PORT });
 
 const users = new Map();
 let userIdCounter = 0;
 
-wss.on('connection', (ws) => {
+function isOriginAllowed(origin) {
+    if (!origin) return true;
+    return ALLOWED_ORIGINS.some(allowed => 
+        origin === allowed || origin.startsWith(allowed)
+    );
+}
+
+wss.on('connection', (ws, req) => {
+    const origin = req.headers.origin;
+    
+    if (!isOriginAllowed(origin)) {
+        console.warn(`[WS] Rejected connection from unauthorized origin: ${origin}`);
+        ws.close();
+        return;
+    }
+
     const id = ++userIdCounter;
     ws.id = id;
     const user = { ws, x: 0, y: 0, lastMove: Date.now(), visible: true };
     users.set(id, user);
+
+    console.log(`[WS] User ${id} connected. Total: ${users.size}`);
 
     ws.send(JSON.stringify({ t: 'init', id, count: users.size }));
 
@@ -32,25 +54,42 @@ wss.on('connection', (ws) => {
             if (!user) return;
 
             if (msg.t === 'm') {
-                user.x = msg.x;
-                user.y = msg.y;
+                if (typeof msg.x !== 'number' || typeof msg.y !== 'number') {
+                    console.warn(`[WS] Invalid move message from user ${id}`);
+                    return;
+                }
+                const x = Math.max(0, Math.min(1, msg.x));
+                const y = Math.max(0, Math.min(1, msg.y));
+                user.x = x;
+                user.y = y;
                 user.lastMove = Date.now();
                 if (user.visible) {
-                    broadcast({ t: 'm', id, x: msg.x, y: msg.y }, ws);
+                    broadcast({ t: 'm', id, x, y }, ws);
                 }
             } else if (msg.t === 'hide') {
                 user.visible = false;
                 broadcast({ t: 'leave', id }, ws);
             } else if (msg.t === 'show') {
+                if (typeof msg.x === 'number' && typeof msg.y === 'number') {
+                    user.x = Math.max(0, Math.min(1, msg.x));
+                    user.y = Math.max(0, Math.min(1, msg.y));
+                }
                 user.visible = true;
-                user.x = msg.x;
-                user.y = msg.y;
-                broadcast({ t: 'join', id, x: msg.x, y: msg.y }, ws);
+                broadcast({ t: 'join', id, x: user.x, y: user.y }, ws);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error(`[WS] Failed to parse message from user ${id}:`, e.message);
+        }
     });
 
     ws.on('close', () => {
+        users.delete(id);
+        console.log(`[WS] User ${id} disconnected. Total: ${users.size}`);
+        broadcast({ t: 'leave', id }, null);
+    });
+
+    ws.on('error', (err) => {
+        console.error(`[WS] Error for user ${id}:`, err.message);
         users.delete(id);
         broadcast({ t: 'leave', id }, null);
     });
@@ -69,6 +108,7 @@ const cleanup = setInterval(() => {
     const now = Date.now();
     for (const [id, user] of users) {
         if (now - user.lastMove > 120000) {
+            console.log(`[WS] Cleaning up inactive user ${id}`);
             user.ws.close();
             users.delete(id);
             broadcast({ t: 'leave', id }, null);
@@ -76,4 +116,14 @@ const cleanup = setInterval(() => {
     }
 }, 60000);
 
-console.log('WebSocket server running on ws://localhost:3001');
+process.on('SIGTERM', () => {
+    console.log('[WS] Shutting down...');
+    clearInterval(cleanup);
+    for (const user of users.values()) {
+        user.ws.close();
+    }
+    wss.close();
+});
+
+console.log(`[WS] Server running on ws://localhost:${PORT}`);
+console.log(`[WS] Allowed origins: ${ALLOWED_ORIGINS.join(', ')}`);

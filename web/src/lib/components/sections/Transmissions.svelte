@@ -48,80 +48,89 @@
 
 <style>
     .section {
-        color: #CEC5B4;
+        color: #454138;
     }
 
     h2 {
-        font-size: 12px;
-        color: #00ff88;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #4a4a6a;
+        font-size: 1rem;
+        color: #454138;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 0.1rem solid #bab5a1;
+        text-transform: uppercase;
+        letter-spacing: 0.3rem;
+        font-weight: normal;
     }
 
     .intro {
-        font-size: 9px;
-        color: #888;
-        margin-bottom: 16px;
+        font-size: 0.8rem;
+        color: #454138;
+        margin-bottom: 1rem;
     }
 
     .transmission-list {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .transmission-item {
         display: block;
-        padding: 12px;
-        background: #0f0f1a;
-        border: 2px solid #3a3a5a;
+        padding: 0.75rem;
+        background: #d1cdb7;
+        border: 0.1rem solid #bab5a1;
         text-decoration: none;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
+        color: #454138;
     }
 
     .transmission-item:hover {
-        border-color: #ffe66d;
+        box-shadow: 0.2em 0.2em 0.1em 0 #bab5a1;
     }
 
     .tx-header {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 6px;
+        margin-bottom: 0.4rem;
     }
 
     .tx-id {
-        font-size: 8px;
-        color: #4a4a6a;
+        font-size: 0.7rem;
+        color: #bab5a1;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
     }
 
     .tx-status {
-        font-size: 7px;
-        color: #00ff88;
-        background: rgba(0, 255, 136, 0.1);
-        padding: 2px 6px;
+        font-size: 0.6rem;
+        color: #454138;
+        background: #bab5a1;
+        padding: 0.15rem 0.4rem;
     }
 
     .tx-title {
-        font-size: 10px;
-        color: #CEC5B4;
-        margin-bottom: 4px;
+        font-size: 0.85rem;
+        color: #454138;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        font-weight: normal;
     }
 
     .tx-date {
-        font-size: 8px;
-        color: #666;
+        font-size: 0.7rem;
+        color: #bab5a1;
     }
 
     .empty-state {
-        margin-top: 20px;
-        padding: 16px;
-        border: 2px dashed #3a3a5a;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border: 0.1rem dashed #bab5a1;
         text-align: center;
     }
 
     .empty-state p {
-        font-size: 9px;
-        color: #666;
+        font-size: 0.8rem;
+        color: #bab5a1;
     }
 </style>

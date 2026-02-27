@@ -15,7 +15,7 @@
         return tints[id % tints.length];
     }
 
-    $: cursors = $cursorList;
+    let cursors = $derived($cursorList);
 </script>
 
 <div class="cursors-container">
@@ -53,7 +53,5 @@
     .cursor-img {
         width: 16px;
         height: 16px;
-        image-rendering: pixelated;
-        image-rendering: crisp-edges;
     }
 </style>

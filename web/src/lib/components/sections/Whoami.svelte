@@ -40,81 +40,89 @@
 
 <style>
     .section {
-        color: #CEC5B4;
+        color: #454138;
     }
 
     h2 {
-        font-size: 12px;
-        color: #00ff88;
-        margin-bottom: 20px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #4a4a6a;
+        font-size: 1rem;
+        color: #454138;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 0.1rem solid #bab5a1;
+        text-transform: uppercase;
+        letter-spacing: 0.3rem;
+        font-weight: normal;
     }
 
     .profile {
         display: flex;
-        gap: 16px;
-        margin-bottom: 20px;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
         align-items: center;
     }
 
     .avatar-placeholder {
         width: 64px;
         height: 64px;
-        background: #0f0f1a;
-        border: 3px solid #4a4a6a;
+        background: #d1cdb7;
+        border: 0.1rem solid #bab5a1;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 32px;
-        color: #4a4a6a;
+        color: #bab5a1;
     }
 
     .info h3 {
-        font-size: 14px;
-        color: #ffe66d;
-        margin-bottom: 4px;
+        font-size: 1.1rem;
+        color: #454138;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        font-weight: normal;
     }
 
     .designation, .status {
-        font-size: 9px;
-        color: #888;
+        font-size: 0.8rem;
+        color: #454138;
     }
 
     .status {
-        color: #00ff88;
+        color: #454138;
     }
 
     .bio {
-        margin-bottom: 20px;
+        margin-bottom: 1.5rem;
         line-height: 1.8;
     }
 
     .bio p {
-        margin-bottom: 12px;
+        margin-bottom: 0.75rem;
     }
 
     .stats {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .stat {
         display: flex;
         justify-content: space-between;
-        padding: 8px;
-        background: #0f0f1a;
-        border-left: 3px solid #4a4a6a;
+        padding: 0.75rem;
+        background: #d1cdb7;
+        border-left: 0.2rem solid #bab5a1;
     }
 
     .stat .label {
-        font-size: 8px;
-        color: #888;
+        font-size: 0.7rem;
+        color: #454138;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
     }
 
     .stat .value {
-        font-size: 9px;
-        color: #CEC5B4;
+        font-size: 0.8rem;
+        color: #454138;
     }
 </style>

@@ -1,8 +1,7 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import type { WindowState } from '$lib/stores/windows';
-    import { windowManager } from '$lib/stores/windows';
-    import { playSound } from '$lib/stores/sounds';
+    import { windowManager, sanitizeHtml } from '$lib/stores/windows';
     import type { Snippet } from 'svelte';
 
     interface Props {
@@ -26,7 +25,6 @@
                 x: e.clientX - win.x,
                 y: e.clientY - win.y
             };
-            playSound('click');
         }
     }
 
@@ -50,30 +48,13 @@
     }
 
     function handleMouseUp() {
-        if (isDragging || isResizing) {
-            playSound('release');
-        }
         isDragging = false;
         isResizing = false;
     }
 
     function handleClose() {
-        playSound('close');
         windowManager.closeWindow(win.id);
     }
-
-    $effect(() => {
-        if (browser) {
-            if (isDragging || isResizing) {
-                document.addEventListener('mousemove', handleMouseMove);
-                document.addEventListener('mouseup', handleMouseUp);
-            }
-            return () => {
-                document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp);
-            };
-        }
-    });
 </script>
 
 <svelte:window 
@@ -105,47 +86,55 @@
             {#if children}
                 {@render children()}
             {:else}
-                {@html win.content}
+                {@html sanitizeHtml(win.content)}
             {/if}
         </div>
         
-        <div class="resize-handle" onmousedown={handleResizeMouseDown} role="separator" aria-label="Resize window"></div>
+        <div 
+            class="resize-handle" 
+            onmousedown={handleResizeMouseDown} 
+            role="button"
+            tabindex="-1"
+            aria-label="Resize window"
+        ></div>
     </div>
 {/if}
 
 <style>
     .window {
         position: fixed;
-        background: #1a1a2e;
-        border: 3px solid #4a4a6a;
-        box-shadow: 8px 8px 0 #000;
+        background: #dcd8c0;
+        border: 0.1rem solid #bab5a1;
+        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
         display: flex;
         flex-direction: column;
-        font-family: 'Press Start 2P', monospace;
-        image-rendering: pixelated;
+        font-family: helvetica, sans-serif;
+        letter-spacing: 0.03rem;
+        font-weight: lighter;
+        color: #454138;
     }
 
     .window.focused {
-        border-color: #6a6a8a;
-        box-shadow: 8px 8px 0 #000, 0 0 20px rgba(0, 255, 136, 0.1);
+        box-shadow: 0.4rem 0.4rem 0 #bab5a1;
     }
 
     .window-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
-        background: #0f0f1a;
-        border-bottom: 2px solid #4a4a6a;
+        padding: 0.5rem 1rem;
+        background: #454138;
+        border-bottom: 0.1rem solid #bab5a1;
         cursor: move;
         user-select: none;
     }
 
     .window-title {
-        font-size: 10px;
-        color: #00ff88;
+        font-size: 0.9rem;
+        color: #bab5a1;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5rem;
+        font-weight: normal;
     }
 
     .window-controls {
@@ -156,9 +145,9 @@
     .control-btn {
         width: 20px;
         height: 20px;
-        background: #2a2a4a;
-        border: 2px solid #4a4a6a;
-        color: #888;
+        background: #bab5a1;
+        border: none;
+        color: #454138;
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -166,24 +155,19 @@
         cursor: pointer;
         padding: 0;
         line-height: 1;
+        transition: all 0.2s;
     }
 
     .control-btn:hover {
-        background: #3a3a5a;
-        color: #fff;
-    }
-
-    .control-btn.close:hover {
-        background: #ff6b6b;
-        border-color: #ff6b6b;
+        background: #454138;
+        color: #dcd8c0;
     }
 
     .window-content {
         flex: 1;
-        padding: 16px;
+        padding: 1rem;
         overflow-y: auto;
-        color: #CEC5B4;
-        font-size: 10px;
+        font-size: 0.85rem;
         line-height: 1.8;
     }
 
@@ -192,12 +176,12 @@
     }
 
     .window-content::-webkit-scrollbar-track {
-        background: #0f0f1a;
+        background: #d1cdb7;
     }
 
     .window-content::-webkit-scrollbar-thumb {
-        background: #4a4a6a;
-        border: 1px solid #3a3a5a;
+        background: #bab5a1;
+        border: 1px solid #bab5a1;
     }
 
     .resize-handle {
@@ -207,6 +191,6 @@
         width: 16px;
         height: 16px;
         cursor: se-resize;
-        background: linear-gradient(135deg, transparent 50%, #4a4a6a 50%);
+        background: linear-gradient(135deg, transparent 50%, #bab5a1 50%);
     }
 </style>

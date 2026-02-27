@@ -23,7 +23,7 @@ export async function loadTransmissions(): Promise<Transmission[]> {
         transmissions.push({
             slug,
             title: data.title || 'Untitled',
-            date: data.date || '',
+            date: String(data.date || ''),
             description: data.description || '',
             content,
             html: await marked(content)

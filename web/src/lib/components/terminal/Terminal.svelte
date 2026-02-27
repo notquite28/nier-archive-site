@@ -1,7 +1,6 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import { windowManager } from '$lib/stores/windows';
-    import { playSound } from '$lib/stores/sounds';
     import { viewerCount } from '$lib/stores/cursors';
 
     let count = $derived($viewerCount);
@@ -31,7 +30,6 @@
                 for (let i = 0; i < commands.length; i++) {
                     await new Promise(r => setTimeout(r, 200));
                     visibleCommands = [...visibleCommands, commands[i].id];
-                    playSound('click');
                 }
                 await new Promise(r => setTimeout(r, 300));
                 bootComplete = true;
@@ -41,8 +39,6 @@
     });
 
     function handleCommand(cmd: Command) {
-        playSound('open');
-        
         const centerX = browser ? (window.innerWidth - cmd.width) / 2 : 100;
         const centerY = browser ? (window.innerHeight - cmd.height) / 2 : 100;
         
@@ -103,47 +99,49 @@
 
 <style>
     .terminal {
-        background: rgba(26, 26, 46, 0.9);
-        border: 3px solid #4a4a6a;
-        padding: 20px 24px;
-        min-width: 280px;
-        box-shadow: 8px 8px 0 #000;
+        background: #dcd8c0;
+        border: 0.1rem solid #bab5a1;
+        padding: 1.5rem 2rem;
+        min-width: 320px;
+        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
     }
 
     .terminal-header {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 2px solid #4a4a6a;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 0.1rem solid #bab5a1;
     }
 
     .prompt {
-        color: #00ff88;
-        font-size: 14px;
+        color: #454138;
+        font-size: 1rem;
+        font-weight: normal;
     }
 
     .system-text {
-        color: #CEC5B4;
-        font-size: 10px;
-        letter-spacing: 1px;
+        color: #454138;
+        font-size: 0.85rem;
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
     }
 
     .boot-line {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 8px;
-        font-size: 9px;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
     }
 
     .prefix {
-        color: #4a4a6a;
+        color: #bab5a1;
     }
 
     .boot-text {
-        color: #888;
+        color: #454138;
     }
 
     .status {
@@ -151,13 +149,15 @@
     }
 
     .status.success {
-        color: #00ff88;
+        color: #454138;
+        background: #bab5a1;
+        padding: 0.1rem 0.5rem;
     }
 
     .separator {
-        height: 1px;
-        background: #3a3a5a;
-        margin: 16px 0;
+        height: 0.1rem;
+        background: #bab5a1;
+        margin: 1rem 0;
     }
 
     .command-list {
@@ -170,41 +170,101 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 10px 12px;
-        background: transparent;
-        border: 2px solid transparent;
+        padding: 0.75rem 1rem;
+        background-color: transparent;
+        border: none;
         text-align: left;
-        cursor: pointer;
-        transition: all 0.15s;
+        color: #454138;
+        position: relative;
+        z-index: 1;
+        font-family: inherit;
+        font-size: inherit;
+        letter-spacing: inherit;
+        width: 100%;
+    }
+
+    .command-item:not(:disabled):before {
+        content: '';
+        transition: all 0.2s;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .command-item:not(:disabled):after {
+        content: '';
+        transition: all 0.2s ease-out;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        background-color: #454138;
+        z-index: -1;
     }
 
     .command-item:hover:not(:disabled) {
-        background: #0f0f1a;
-        border-color: #4a4a6a;
+        background-color: transparent;
+        box-shadow: none;
+        color: #dcd8c0;
+    }
+
+    .command-item:hover:not(:disabled):before {
+        top: -0.2rem;
+        bottom: -0.2rem;
+        border: solid #454138;
+        border-width: 0.1rem 0;
+    }
+
+    .command-item:hover:not(:disabled):after {
+        width: 100%;
+    }
+
+    .command-item:hover:not(:disabled) .cmd-label,
+    .command-item:hover:not(:disabled) .cmd-prefix {
+        color: #dcd8c0;
+    }
+
+    .command-item:active:not(:disabled) {
+        color: #454138;
+    }
+
+    .command-item:active:not(:disabled):after {
+        background-color: #dcd8c0;
+    }
+
+    .command-item:active:not(:disabled) .cmd-label,
+    .command-item:active:not(:disabled) .cmd-prefix {
+        color: #454138;
     }
 
     .command-item:disabled {
         cursor: wait;
+        background-color: transparent;
     }
 
     .cmd-prefix {
-        color: #ffe66d;
-        font-size: 12px;
+        color: #454138;
+        font-size: 0.9rem;
     }
 
     .cmd-label {
-        color: #CEC5B4;
-        font-size: 11px;
+        color: #454138;
+        font-size: 0.9rem;
         flex: 1;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
     }
 
     .command-item:hover .cmd-label {
-        color: #fff;
+        color: #454138;
     }
 
     .cmd-hint {
-        color: #4a4a6a;
-        font-size: 8px;
+        color: #bab5a1;
+        font-size: 0.7rem;
         opacity: 0;
         transition: opacity 0.15s;
     }
@@ -217,13 +277,13 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-top: 16px;
-        padding-top: 12px;
-        border-top: 2px solid #4a4a6a;
+        margin-top: 1rem;
+        padding-top: 0.75rem;
+        border-top: 0.1rem solid #bab5a1;
     }
 
     .blink {
-        color: #00ff88;
+        color: #454138;
         animation: blink 1s step-end infinite;
     }
 
@@ -233,7 +293,7 @@
     }
 
     .hint {
-        color: #666;
-        font-size: 8px;
+        color: #bab5a1;
+        font-size: 0.75rem;
     }
 </style>

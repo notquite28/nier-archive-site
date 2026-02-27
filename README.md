@@ -1,6 +1,6 @@
 # Pixel Room
 
-Real-time cursor sharing with pixel art aesthetics.
+Real-time cursor sharing with pixel art aesthetics inspired by NieR: Automata.
 
 ## Structure
 
@@ -39,6 +39,11 @@ Open multiple tabs to see cursor sharing in action.
 - **Viewer count** - Shows how many people are currently on the page
 - **Visit counter** - Tracks total page visits with referrer data
 - **Visibility detection** - Cursors hide when tab is not focused
+- **Terminal-style navigation** - Click-based command menu with boot sequence
+- **Draggable windows** - Resizable content windows for different sections
+- **Background music** - Music player with seek bar and volume control
+- **Easter eggs** - Konami code and rapid-click achievements
+- **Blog system** - Markdown-based transmissions
 
 ## Tech Stack
 
@@ -118,15 +123,25 @@ In Pages dashboard:
 ### Reset Analytics
 
 ```bash
-curl -X DELETE "https://yoursite.pages.dev/api/analytics?token=YOUR_ADMIN_TOKEN"
+curl -X DELETE "https://yoursite.pages.dev/api/analytics" \
+  -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
 ```
 
 ## Environment Variables
+
+### Frontend (Cloudflare Pages)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `VITE_WS_URL` | `ws://localhost:3001` | WebSocket server URL |
 | `ANALYTICS_ADMIN_TOKEN` | - | Secret for analytics reset (set in CF dashboard) |
+
+### WebSocket Server
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `WS_PORT` | `3001` | WebSocket server port |
+| `ALLOWED_ORIGINS` | `http://localhost:5173,...` | Comma-separated allowed origins |
 
 ## Assets
 
@@ -134,7 +149,7 @@ Assets are stored in `web/static/assets/`:
 
 | File | Description |
 |------|-------------|
-| `cursor.svg` | Custom cursor (currently NieR-themed) |
+| `cursor.svg` | Custom NieR-themed cursor |
 | `track.mp3` | Background music |
 
 ### Music Configuration

@@ -1,7 +1,7 @@
 ---
 title: The NieR Inspiration
 date: 2024-02-15
-description: How NieR: Automata influenced this project
+description: "How NieR: Automata influenced this project"
 ---
 
 ## A Different Kind of Ending
@@ -18,11 +18,11 @@ This site draws from that philosophy:
 
 ### The Aesthetic
 
-The 8-bit segment of NieR's soundtrack inspired the visual direction:
+The YoRHa interface design inspired the visual direction:
 
-- Pixel fonts
-- Dark terminals
-- Scanline backgrounds
+- Clean Helvetica typography
+- Warm beige color palette
+- Subtle grid pattern backgrounds
 - Weight of the World playing softly
 
 ### Technical Notes

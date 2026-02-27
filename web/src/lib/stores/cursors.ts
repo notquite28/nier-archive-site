@@ -6,10 +6,6 @@ export interface RemoteCursor {
     y: number;
 }
 
-export interface ViewerCount {
-    count: number;
-}
-
 function createCursorStore() {
     const { subscribe, set, update } = writable<Map<number, RemoteCursor>>(new Map());
 
@@ -21,17 +17,20 @@ function createCursorStore() {
             return newMap;
         }),
         updateCursor: (id: number, x: number, y: number) => update(map => {
-            const newMap = new Map(map);
-            const existing = newMap.get(id);
-            if (existing) {
-                newMap.set(id, { ...existing, x, y });
+            if (map.has(id)) {
+                const newMap = new Map(map);
+                newMap.set(id, { id, x, y });
+                return newMap;
             }
-            return newMap;
+            return map;
         }),
         removeCursor: (id: number) => update(map => {
-            const newMap = new Map(map);
-            newMap.delete(id);
-            return newMap;
+            if (map.has(id)) {
+                const newMap = new Map(map);
+                newMap.delete(id);
+                return newMap;
+            }
+            return map;
         }),
         syncCursors: (cursors: RemoteCursor[]) => set(new Map(cursors.map(c => [c.id, c]))),
         clear: () => set(new Map())

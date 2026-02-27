@@ -7,7 +7,7 @@ interface ReferrerData {
     [referrer: string]: number;
 }
 
-const REFERRER_TTL = 60 * 60 * 24 * 30; // 30 days
+const REFERRER_TTL = 60 * 60 * 24 * 30;
 
 function getTodayKey(): string {
     return `referrers:${new Date().toISOString().split('T')[0]}`;
@@ -56,6 +56,7 @@ export async function onRequestGet(context: { env: Env }): Promise<Response> {
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
+        console.error('Failed to fetch analytics:', error);
         return new Response(JSON.stringify({ error: 'Failed to fetch analytics' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
@@ -85,6 +86,7 @@ export async function onRequestPost(context: { env: Env; request: Request }): Pr
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
+        console.error('Failed to record visit:', error);
         return new Response(JSON.stringify({ error: 'Failed to record visit' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
@@ -95,8 +97,8 @@ export async function onRequestPost(context: { env: Env; request: Request }): Pr
 export async function onRequestDelete(context: { env: Env; request: Request }): Promise<Response> {
     const { env, request } = context;
     
-    const url = new URL(request.url);
-    const token = url.searchParams.get('token');
+    const authHeader = request.headers.get('Authorization');
+    const token = authHeader?.replace('Bearer ', '');
     
     if (!env.ANALYTICS_ADMIN_TOKEN || token !== env.ANALYTICS_ADMIN_TOKEN) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
@@ -113,10 +115,12 @@ export async function onRequestDelete(context: { env: Env; request: Request }): 
             await env.ANALYTICS.delete(key.name);
         }
         
+        console.log('Analytics reset successfully');
         return new Response(JSON.stringify({ success: true, message: 'Analytics reset' }), {
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
+        console.error('Failed to reset analytics:', error);
         return new Response(JSON.stringify({ error: 'Failed to reset analytics' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }

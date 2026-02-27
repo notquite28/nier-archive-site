@@ -44,35 +44,37 @@
         position: fixed;
         bottom: 16px;
         left: 16px;
-        background: #1a1a2e;
-        border: 3px solid #4a4a6a;
-        padding: 8px 16px;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 10px;
-        color: #fff;
+        background: #dcd8c0;
+        border: 0.1rem solid #bab5a1;
+        padding: 0.5rem 1rem;
+        font-family: helvetica, sans-serif;
+        font-size: 0.75rem;
+        color: #454138;
         display: flex;
         align-items: center;
-        gap: 8px;
-        image-rendering: pixelated;
-        box-shadow: 4px 4px 0 #000;
+        gap: 0.5rem;
+        letter-spacing: 0.03rem;
+        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
     }
 
     .icon {
-        color: #ffe66d;
-        font-size: 12px;
+        color: #454138;
+        font-size: 0.9rem;
     }
 
     .count {
-        color: #00ff88;
+        color: #454138;
         min-width: 48px;
         text-align: right;
     }
 
     .label {
-        color: #8888aa;
+        color: #454138;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
     }
 
     .loading {
-        color: #8888aa;
+        color: #bab5a1;
     }
 </style>

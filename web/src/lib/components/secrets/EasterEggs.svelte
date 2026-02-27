@@ -1,7 +1,6 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import { onMount } from 'svelte';
-    import { playSound } from '$lib/stores/sounds';
 
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
@@ -55,7 +54,6 @@
         achievementName = name;
         achievementTitle = title;
         showAchievement = true;
-        playSound('success');
         
         await new Promise(r => setTimeout(r, 4000));
         showAchievement = false;
@@ -95,13 +93,13 @@
         bottom: 80px;
         left: 50%;
         transform: translateX(-50%);
-        background: #1a1a2e;
-        border: 3px solid #ffe66d;
-        padding: 16px 24px;
+        background: #dcd8c0;
+        border: 0.1rem solid #bab5a1;
+        padding: 1rem 1.5rem;
         display: flex;
         align-items: center;
-        gap: 16px;
-        box-shadow: 8px 8px 0 #000, 0 0 30px rgba(255, 230, 109, 0.3);
+        gap: 1rem;
+        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
         animation: slideUp 0.3s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
         z-index: 9999;
     }
@@ -124,7 +122,7 @@
     }
 
     .achievement-icon {
-        font-size: 32px;
+        font-size: 2rem;
         animation: bounce 0.5s ease-out;
     }
 
@@ -136,35 +134,38 @@
     .achievement-content {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 0.25rem;
     }
 
     .achievement-label {
-        font-size: 8px;
-        color: #ffe66d;
-        letter-spacing: 2px;
+        font-size: 0.65rem;
+        color: #454138;
+        letter-spacing: 0.15rem;
+        text-transform: uppercase;
     }
 
     .achievement-name {
-        font-size: 14px;
-        color: #fff;
+        font-size: 1rem;
+        color: #454138;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
     }
 
     .achievement-title {
-        font-size: 9px;
-        color: #888;
+        font-size: 0.75rem;
+        color: #bab5a1;
     }
 
     .achievements-badge {
         position: fixed;
         bottom: 16px;
         right: 200px;
-        background: #1a1a2e;
-        border: 2px solid #4a4a6a;
-        padding: 6px 10px;
-        font-size: 12px;
+        background: #dcd8c0;
+        border: 0.1rem solid #bab5a1;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
         display: flex;
-        gap: 8px;
-        box-shadow: 4px 4px 0 #000;
+        gap: 0.5rem;
+        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
     }
 </style>

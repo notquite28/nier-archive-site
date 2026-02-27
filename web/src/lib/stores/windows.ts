@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import { writable, derived } from 'svelte/store';
 
 export interface WindowState {
@@ -13,9 +14,8 @@ export interface WindowState {
     focused: boolean;
 }
 
-let baseZIndex = 100;
-
 function createWindowManager() {
+    let baseZIndex = 100;
     const { subscribe, set, update } = writable<WindowState[]>([]);
 
     function openWindow(window: Omit<WindowState, 'zIndex' | 'minimized' | 'focused'>) {
@@ -69,6 +69,7 @@ function createWindowManager() {
     }
 
     function closeAllWindows() {
+        baseZIndex = 100;
         set([]);
     }
 
@@ -91,3 +92,10 @@ export const focusedWindow = derived(windowManager, $windows =>
 );
 
 export const openWindowCount = derived(windowManager, $windows => $windows.length);
+
+export function sanitizeHtml(html: string): string {
+    return DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'code', 'pre', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'hr', 'span'],
+        ALLOWED_ATTR: ['href', 'target', 'rel', 'class']
+    });
+}

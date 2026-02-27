@@ -1,10 +1,27 @@
 <script lang="ts">
-    // Placeholder - will be replaced with actual blog data
-    const transmissions = [
-        { id: '001', title: 'Archive Initialized', date: '2024.02.27', status: 'RECEIVED' },
-        { id: '002', title: 'Building Immersive Spaces', date: '2024.02.20', status: 'RECEIVED' },
-        { id: '003', title: 'The Cursor Concurrency Experiment', date: '2024.02.15', status: 'RECEIVED' }
-    ];
+    import { onMount } from 'svelte';
+    import type { Transmission } from '$lib/data/transmissions';
+    
+    let transmissions = $state<{slug: string, title: string, date: string}[]>([]);
+    
+    onMount(async () => {
+        try {
+            const res = await fetch('/api/transmissions');
+            if (res.ok) {
+                transmissions = await res.json();
+            }
+        } catch (e) {
+            transmissions = [
+                { slug: '001-archive-initialized', title: 'Archive Initialized', date: '2024.02.27' },
+                { slug: '002-immersive-spaces', title: 'Building Immersive Spaces', date: '2024.02.20' },
+                { slug: '003-nier-inspiration', title: 'The NieR Inspiration', date: '2024.02.15' }
+            ];
+        }
+    });
+    
+    function formatSlug(slug: string): string {
+        return slug.split('-')[0].toUpperCase();
+    }
 </script>
 
 <div class="section transmissions">
@@ -12,11 +29,11 @@
     <p class="intro">Log entries received from the network.</p>
     
     <div class="transmission-list">
-        {#each transmissions as tx}
-            <a href="/transmissions/{tx.id}" class="transmission-item">
+        {#each transmissions as tx (tx.slug)}
+            <a href="/transmissions/{tx.slug}" class="transmission-item">
                 <div class="tx-header">
-                    <span class="tx-id">TX-{tx.id}</span>
-                    <span class="tx-status">{tx.status}</span>
+                    <span class="tx-id">TX-{formatSlug(tx.slug)}</span>
+                    <span class="tx-status">RECEIVED</span>
                 </div>
                 <h3 class="tx-title">{tx.title}</h3>
                 <span class="tx-date">{tx.date}</span>

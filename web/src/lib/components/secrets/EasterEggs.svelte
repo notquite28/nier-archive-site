@@ -1,7 +1,6 @@
 <script lang="ts">
     import { browser } from '$app/environment';
     import { onMount } from 'svelte';
-    import { windowManager } from '$lib/stores/windows';
     import { playSound } from '$lib/stores/sounds';
 
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -11,6 +10,10 @@
     let clickCount = $state(0);
     let lastClickTime = 0;
     let secretClickUnlocked = $state(false);
+
+    let showAchievement = $state(false);
+    let achievementTitle = $state('');
+    let achievementName = $state('');
 
     function handleKeyDown(e: KeyboardEvent) {
         if (e.key === konamiCode[konamiIndex]) {
@@ -27,24 +30,7 @@
     function unlockKonami() {
         if (konamiUnlocked) return;
         konamiUnlocked = true;
-        playSound('success');
-        
-        windowManager.openWindow({
-            id: 'secret-konami',
-            title: 'CLASSIFIED',
-            content: `
-                <div style="text-align: center; padding: 20px; font-family: 'Press Start 2P', monospace;">
-                    <h3 style="color: #ffe66d; font-size: 12px; margin-bottom: 16px;">ACCESS GRANTED</h3>
-                    <p style="color: #CEC5B4; font-size: 10px; margin-bottom: 12px;">You've discovered a secret.</p>
-                    <p style="color: #888; font-size: 8px;">The Archive recognizes your dedication.</p>
-                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;">Achievement Unlocked: Old School</p>
-                </div>
-            `,
-            x: 200,
-            y: 150,
-            width: 400,
-            height: 280
-        });
+        showAchievementPopup('Old School', 'Konami code discovered');
     }
 
     function handleSecretClick() {
@@ -62,24 +48,17 @@
 
     function unlockSecretClick() {
         secretClickUnlocked = true;
+        showAchievementPopup('Clicker', 'Rapid clicking detected');
+    }
+
+    async function showAchievementPopup(name: string, title: string) {
+        achievementName = name;
+        achievementTitle = title;
+        showAchievement = true;
         playSound('success');
         
-        windowManager.openWindow({
-            id: 'secret-click',
-            title: 'UNIT RECOGNIZED',
-            content: `
-                <div style="text-align: center; padding: 20px; font-family: 'Press Start 2P', monospace;">
-                    <h3 style="color: #ffe66d; font-size: 12px; margin-bottom: 16px;">PERSISTENCE DETECTED</h3>
-                    <p style="color: #CEC5B4; font-size: 10px; margin-bottom: 12px;">Your determination has been noted.</p>
-                    <p style="color: #888; font-size: 8px;">The Archive remembers all who explore deeply.</p>
-                    <p style="color: #00ff88; margin-top: 20px; font-size: 9px;">Achievement Unlocked: Clicker</p>
-                </div>
-            `,
-            x: 250,
-            y: 200,
-            width: 400,
-            height: 280
-        });
+        await new Promise(r => setTimeout(r, 4000));
+        showAchievement = false;
     }
 
     onMount(() => {
@@ -92,6 +71,17 @@
 
 <svelte:window onclick={handleSecretClick} />
 
+{#if showAchievement}
+    <div class="achievement-popup">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-content">
+            <span class="achievement-label">ACHIEVEMENT UNLOCKED</span>
+            <span class="achievement-name">{achievementName}</span>
+            <span class="achievement-title">{achievementTitle}</span>
+        </div>
+    </div>
+{/if}
+
 {#if konamiUnlocked || secretClickUnlocked}
     <div class="achievements-badge" title="Secrets discovered">
         {#if konamiUnlocked}🏆{/if}
@@ -100,6 +90,71 @@
 {/if}
 
 <style>
+    .achievement-popup {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1a1a2e;
+        border: 3px solid #ffe66d;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 8px 8px 0 #000, 0 0 30px rgba(255, 230, 109, 0.3);
+        animation: slideUp 0.3s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+        z-index: 9999;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateX(-50%) translateY(100px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+        }
+    }
+
+    .achievement-icon {
+        font-size: 32px;
+        animation: bounce 0.5s ease-out;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    .achievement-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .achievement-label {
+        font-size: 8px;
+        color: #ffe66d;
+        letter-spacing: 2px;
+    }
+
+    .achievement-name {
+        font-size: 14px;
+        color: #fff;
+    }
+
+    .achievement-title {
+        font-size: 9px;
+        color: #888;
+    }
+
     .achievements-badge {
         position: fixed;
         bottom: 16px;

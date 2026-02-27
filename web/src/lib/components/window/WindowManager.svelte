@@ -6,23 +6,22 @@
     import Transmissions from '../sections/Transmissions.svelte';
     import Network from '../sections/Network.svelte';
 
-    const sectionComponents: Record<string, typeof Whoami> = {
-        whoami: Whoami,
-        projects: Projects,
-        transmissions: Transmissions,
-        network: Network
-    };
-
-    $: windows = $windowManager;
+    let windows = $derived($windowManager);
 </script>
 
 <div class="window-container">
     {#each windows as win (win.id)}
         <Window window={win}>
-            {#if sectionComponents[win.id]}
-                <svelte:component this={sectionComponents[win.id]} />
+            {#if win.id === 'whoami'}
+                <Whoami />
+            {:else if win.id === 'projects'}
+                <Projects />
+            {:else if win.id === 'transmissions'}
+                <Transmissions />
+            {:else if win.id === 'network'}
+                <Network />
             {:else}
-                {win.content}
+                {@html win.content}
             {/if}
         </Window>
     {/each}

@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-    <title>{status} - The Archive</title>
+    <title>{status} - quiet</title>
 </svelte:head>
 
 <div class="error-page">
@@ -23,9 +23,9 @@
         
         <div class="divider"></div>
         
-        <p class="error-hint">The requested data fragment could not be located in the archive.</p>
+        <p class="error-hint">The requested data fragment could not be located.</p>
         
-        <a href="/" class="return-btn">RETURN TO TERMINAL</a>
+        <a href="/" class="return-btn">RETURN</a>
     </div>
 </div>
 

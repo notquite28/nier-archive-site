@@ -66,7 +66,7 @@
 
 <svelte:head>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <title>The Archive</title>
+    <title>quiet</title>
 </svelte:head>
 
 <div class="page">
@@ -79,10 +79,10 @@
     <main class="content">
         <header class="site-header">
             <div class="logo-area">
-                <div class="logo-placeholder">?</div>
+                <div class="logo-placeholder">q</div>
             </div>
-            <h1 class="site-title">The Archive</h1>
-            <p class="site-subtitle">A repository for thoughts, experiments, and discoveries</p>
+            <h1 class="site-title">quiet</h1>
+            <p class="site-subtitle">neet developer/artist/musician</p>
         </header>
 
         <div class="sections-container">

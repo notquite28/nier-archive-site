@@ -4,12 +4,12 @@
 <div class="section whoami">
     <div class="profile">
         <div class="avatar-placeholder">
-            <span>?</span>
+            <span>q</span>
         </div>
         
         <div class="info">
-            <h3>ARCHIVIST</h3>
-            <p class="designation">Designation: Primary Unit</p>
+            <h3>quiet</h3>
+            <p class="designation">neet developer/artist/musician</p>
             <p class="status">Status: Online</p>
         </div>
     </div>
@@ -23,7 +23,7 @@
     <div class="stats">
         <div class="stat">
             <span class="label">SPECIALIZATION</span>
-            <span class="value">Creative Development</span>
+            <span class="value">Development / Art / Music</span>
         </div>
         <div class="stat">
             <span class="label">ORIGIN</span>

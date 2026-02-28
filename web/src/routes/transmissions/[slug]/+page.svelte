@@ -40,6 +40,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>{transmission?.title ?? 'Loading...'} - quiet</title>
+</svelte:head>
+
 {#if loading}
     <div class="loading">
         <div class="loading-inner">Loading transmission...</div>
@@ -60,7 +64,7 @@
             
             <footer class="tx-footer">
                 <button class="back-btn" onclick={() => goto('/')}>
-                    ← Return to Archive
+                    ← Return
                 </button>
             </footer>
         </div>
@@ -69,7 +73,7 @@
     <div class="error">
         <div class="error-inner">
             <p>Transmission not found.</p>
-            <button class="back-btn" onclick={() => goto('/')}>Return to Archive</button>
+            <button class="back-btn" onclick={() => goto('/')}>Return</button>
         </div>
     </div>
 {/if}

@@ -19,7 +19,7 @@
     
     <blockquote class="contact">
         <p>To establish direct contact:</p>
-        <cite>hello [at] example [dot] com</cite>
+        <cite>judy2077 [at] protonmail [dot] com</cite>
     </blockquote>
 </div>
 

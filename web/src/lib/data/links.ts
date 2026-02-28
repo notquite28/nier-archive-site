@@ -5,8 +5,8 @@ export interface Link {
 }
 
 export const links: Link[] = [
-    { name: 'GitHub', url: 'https://github.com/yourname', icon: '◈' },
-    { name: 'Twitter', url: 'https://twitter.com/yourname', icon: '◇' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/in/yourname', icon: '◆' },
-    { name: 'RSS Feed', url: '/rss.xml', icon: '▣' }
+    { name: 'GitHub', url: 'https://github.com/notquitethereyet', icon: '◈' },
+    { name: 'Twitter', url: 'https://twitter.com/notquiteartyet', icon: '◇' },
+    { name: 'Spotify', url: 'https://open.spotify.com/user/5p320nqqyaj9yt21i8igkm41q', icon: '♪' },
+    { name: 'Medium', url: 'https://medium.com/@notquitethereyet_', icon: '▣' }
 ];

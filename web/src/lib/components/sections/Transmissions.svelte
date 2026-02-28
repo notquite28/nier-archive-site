@@ -25,7 +25,6 @@
 </script>
 
 <div class="section transmissions">
-    <h2>// TRANSMISSIONS</h2>
     <p class="intro">Log entries received from the network.</p>
     
     <div class="transmission-list">
@@ -51,17 +50,6 @@
         color: #454138;
     }
 
-    h2 {
-        font-size: 1rem;
-        color: #454138;
-        margin-bottom: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 0.1rem solid #bab5a1;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        font-weight: normal;
-    }
-
     .intro {
         font-size: 0.8rem;
         color: #454138;
@@ -85,7 +73,25 @@
     }
 
     .transmission-item:hover {
-        box-shadow: 0.2em 0.2em 0.1em 0 #bab5a1;
+        background: #454138;
+        color: #dcd8c0;
+    }
+
+    .transmission-item:hover .tx-id {
+        color: #bab5a1;
+    }
+
+    .transmission-item:hover .tx-status {
+        background: #bab5a1;
+        color: #454138;
+    }
+
+    .transmission-item:hover .tx-title {
+        color: #dcd8c0;
+    }
+
+    .transmission-item:hover .tx-date {
+        color: #bab5a1;
     }
 
     .tx-header {

@@ -5,7 +5,6 @@
 </script>
 
 <div class="section network">
-    <h2>// NETWORK</h2>
     <p class="intro">External connections and contact protocols.</p>
     
     <div class="link-grid">
@@ -18,27 +17,15 @@
         {/each}
     </div>
     
-    <div class="contact">
-        <h3>SIGNAL TRANSMISSION</h3>
+    <blockquote class="contact">
         <p>To establish direct contact:</p>
-        <code>hello [at] example [dot] com</code>
-    </div>
+        <cite>hello [at] example [dot] com</cite>
+    </blockquote>
 </div>
 
 <style>
     .section {
         color: #454138;
-    }
-
-    h2 {
-        font-size: 1rem;
-        color: #454138;
-        margin-bottom: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 0.1rem solid #bab5a1;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        font-weight: normal;
     }
 
     .intro {
@@ -64,14 +51,29 @@
         text-decoration: none;
         transition: all 0.2s;
         color: #454138;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
     }
 
     .link-card:hover {
+        color: #dcd8c0;
+        background: #454138;
         box-shadow: 0.2em 0.2em 0.1em 0 #bab5a1;
+    }
+
+    .link-card:hover .link-name {
+        color: #dcd8c0;
+    }
+
+    .link-card:hover .link-arrow {
+        color: #dcd8c0;
     }
 
     .link-icon {
         font-size: 1rem;
+        position: relative;
+        z-index: 2;
     }
 
     .link-name {
@@ -80,42 +82,64 @@
         color: #454138;
         text-transform: uppercase;
         letter-spacing: 0.05rem;
+        position: relative;
+        z-index: 2;
+        transition: color 0.2s;
     }
 
     .link-arrow {
         font-size: 0.8rem;
         color: #bab5a1;
-    }
-
-    .link-card:hover .link-arrow {
-        color: #454138;
+        position: relative;
+        z-index: 2;
+        transition: color 0.2s;
     }
 
     .contact {
-        padding: 1rem;
-        background: #d1cdb7;
-        border-left: 0.2rem solid #454138;
+        position: relative;
+        padding: 0.5rem;
+        margin: 1.5rem 0 0 1.5rem;
     }
 
-    .contact h3 {
-        font-size: 0.85rem;
-        color: #454138;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1rem;
-        font-weight: normal;
+    .contact:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -1.5rem;
+        bottom: 0;
+        height: 100%;
+        width: 0.3rem;
+        border: solid #bab5a1;
+        border-width: 0 0.2rem 0 0.6rem;
     }
 
     .contact p {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: #454138;
         margin-bottom: 0.5rem;
     }
 
-    .contact code {
-        font-size: 0.8rem;
+    .contact cite {
+        position: relative;
+        padding-left: 1.5rem;
+        font-style: normal;
+        font-size: 0.9rem;
         color: #454138;
-        background: #bab5a1;
-        padding: 0.25rem 0.5rem;
+    }
+
+    .contact cite:before {
+        content: '';
+        position: absolute;
+        width: 0.7rem;
+        height: 0.7rem;
+        background-color: #454138;
+        margin-left: -1rem;
+        top: 0.25em;
+    }
+
+    @media (max-width: 600px) {
+        .link-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

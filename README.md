@@ -1,13 +1,14 @@
-# Pixel Room
+# The Archive
 
-Real-time cursor sharing with pixel art aesthetics inspired by NieR: Automata.
+Real-time cursor sharing with YoRHa-inspired aesthetics from NieR: Automata.
 
 ## Structure
 
 ```
 ├── server/         # WebSocket server (ultimate-ws + uWebSockets.js)
 ├── web/            # SvelteKit frontend
-│   └── functions/  # Cloudflare Pages Functions (analytics API)
+│   ├── functions/  # Cloudflare Pages Functions (analytics API)
+│   └── src/content/transmissions/  # Markdown blog posts
 ```
 
 ## Quick Start (Local Dev)
@@ -17,7 +18,7 @@ Real-time cursor sharing with pixel art aesthetics inspired by NieR: Automata.
 ```bash
 cd server
 npm install
-npm run dev
+node index.js
 ```
 
 ### 2. Start the Svelte frontend
@@ -37,23 +38,38 @@ Open multiple tabs to see cursor sharing in action.
 
 - **Live cursor sharing** - See other visitors' cursors in real-time
 - **Viewer count** - Shows how many people are currently on the page
-- **Visit counter** - Tracks total page visits with referrer data
-- **Visibility detection** - Cursors hide when tab is not focused
-- **Terminal-style navigation** - Click-based command menu with boot sequence
-- **Draggable windows** - Resizable content windows for different sections
-- **Background music** - Music player with seek bar and volume control
+- **Visit counter** - Tracks total page visits
+- **YoRHa theme** - Beige/cream color palette inspired by NieR: Automata
+- **Accordion navigation** - Collapsible sections for content
+- **Background music** - Play/pause button (50% volume)
 - **Easter eggs** - Konami code and rapid-click achievements
-- **Blog system** - Markdown-based transmissions
+- **Blog system** - Markdown-based transmissions (auto-loaded)
 
 ## Tech Stack
 
 | Component | Technology |
 |-----------|------------|
-| Frontend | SvelteKit 5 + Svelte stores |
+| Frontend | SvelteKit 5 + Svelte runes |
 | WebSocket | ultimate-ws (uWebSockets.js) |
 | Hosting | Cloudflare Pages |
 | Analytics | Cloudflare KV |
-| Font | Press Start 2P (Google Fonts) |
+| Font | Helvetica (system) |
+
+## Adding Transmissions (Blog Posts)
+
+Drop markdown files in `web/src/content/transmissions/`:
+
+```markdown
+---
+title: Your Title
+date: 2024-03-01
+description: "A short description"
+---
+
+Your markdown content here...
+```
+
+Files are auto-loaded and sorted by date (newest first). Filename becomes the URL slug (e.g., `004-new-post.md` → `/transmissions/004-new-post`).
 
 ## Deployment (Cloudflare Pages)
 
@@ -149,17 +165,8 @@ Assets are stored in `web/static/assets/`:
 
 | File | Description |
 |------|-------------|
-| `cursor.svg` | Custom NieR-themed cursor |
+| `cursor.svg` | Custom cursor |
 | `track.mp3` | Background music |
-
-### Music Configuration
-
-Edit the track name in `web/src/lib/components/MusicPlayer.svelte`:
-
-```js
-const trackName = "Your Track Name";
-const artistName = "Artist Name";
-```
 
 ## Development
 

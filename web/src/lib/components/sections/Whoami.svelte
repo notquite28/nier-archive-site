@@ -2,8 +2,6 @@
 </script>
 
 <div class="section whoami">
-    <h2>// UNIT PROFILE</h2>
-    
     <div class="profile">
         <div class="avatar-placeholder">
             <span>?</span>
@@ -43,17 +41,6 @@
         color: #454138;
     }
 
-    h2 {
-        font-size: 1rem;
-        color: #454138;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 0.1rem solid #bab5a1;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        font-weight: normal;
-    }
-
     .profile {
         display: flex;
         gap: 1rem;
@@ -84,10 +71,6 @@
 
     .designation, .status {
         font-size: 0.8rem;
-        color: #454138;
-    }
-
-    .status {
         color: #454138;
     }
 
@@ -124,5 +107,12 @@
     .stat .value {
         font-size: 0.8rem;
         color: #454138;
+    }
+
+    @media (max-width: 600px) {
+        .profile {
+            flex-direction: column;
+            text-align: center;
+        }
     }
 </style>

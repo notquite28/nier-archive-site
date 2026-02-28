@@ -159,13 +159,13 @@
     .achievements-badge {
         position: fixed;
         bottom: 16px;
-        right: 200px;
+        right: 60px;
         background: #dcd8c0;
         border: 0.1rem solid #bab5a1;
-        padding: 0.5rem 0.75rem;
+        padding: 0.4rem 0.6rem;
         font-size: 0.85rem;
         display: flex;
-        gap: 0.5rem;
-        box-shadow: 0.3rem 0.3rem 0 #bab5a1;
+        gap: 0.4rem;
+        box-shadow: 0.2rem 0.2rem 0 #bab5a1;
     }
 </style>

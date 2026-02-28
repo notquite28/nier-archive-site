@@ -23,7 +23,6 @@
 </script>
 
 <div class="section projects">
-    <h2>// DATA FRAGMENTS</h2>
     <p class="intro">Recovered project data from the archive.</p>
     
     <div class="project-list">
@@ -66,17 +65,6 @@
         color: #454138;
     }
 
-    h2 {
-        font-size: 1rem;
-        color: #454138;
-        margin-bottom: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 0.1rem solid #bab5a1;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        font-weight: normal;
-    }
-
     .intro {
         font-size: 0.8rem;
         color: #454138;
@@ -107,7 +95,29 @@
     }
 
     .project-card:not(.disabled):hover {
-        box-shadow: 0.2em 0.2em 0.1em 0 #bab5a1;
+        background: #454138;
+        color: #dcd8c0;
+    }
+
+    .project-card:not(.disabled):hover .project-index {
+        color: #bab5a1;
+    }
+
+    .project-card:not(.disabled):hover .project-info h3 {
+        color: #dcd8c0;
+    }
+
+    .project-card:not(.disabled):hover .project-info p {
+        color: #bab5a1;
+    }
+
+    .project-card:not(.disabled):hover .tag {
+        background: #bab5a1;
+        color: #454138;
+    }
+
+    .project-card:not(.disabled):hover .project-arrow {
+        color: #dcd8c0;
     }
 
     .project-index {
@@ -163,7 +173,22 @@
     }
 
     .project-card:not(.disabled):hover .project-arrow {
-        color: #454138;
         transform: translateX(4px);
+    }
+
+    @media (max-width: 600px) {
+        .project-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .project-index {
+            display: none;
+        }
+
+        .project-arrow {
+            display: none;
+        }
     }
 </style>

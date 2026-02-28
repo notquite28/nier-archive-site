@@ -5,28 +5,29 @@ Real-time cursor sharing with YoRHa-inspired aesthetics from NieR: Automata.
 ## Structure
 
 ```
-├── server/         # WebSocket server (ultimate-ws + uWebSockets.js)
-├── web/            # SvelteKit frontend
-│   ├── functions/  # Cloudflare Pages Functions (analytics API)
-│   └── src/content/transmissions/  # Markdown blog posts
+├── cursor-server/      # WebSocket server (Cloudflare Workers + Durable Objects)
+├── web/                # SvelteKit frontend
+│   ├── vite-plugin-transmissions.ts   # Build-time: parses .md → virtual module
+│   ├── src/routes/api/analytics/       # Analytics API (SvelteKit route, KV)
+│   ├── src/content/transmissions/      # Markdown blog posts (add file + build)
+│   └── functions/api/                  # Optional Pages Functions (same logic)
 ```
 
 ## Quick Start (Local Dev)
 
-### 1. Start the WebSocket server
+### 1. Start the Cursor Server
 
 ```bash
-cd server
+cd cursor-server
 npm install
-node index.js
+npm run dev
 ```
 
-### 2. Start the Svelte frontend
+### 2. Start the Svelte Frontend
 
 ```bash
 cd web
 npm install
-cp .env.example .env
 npm run dev
 ```
 
@@ -50,7 +51,7 @@ Open multiple tabs to see cursor sharing in action.
 | Component | Technology |
 |-----------|------------|
 | Frontend | SvelteKit 5 + Svelte runes |
-| WebSocket | ultimate-ws (uWebSockets.js) |
+| WebSocket | Cloudflare Workers + Durable Objects |
 | Hosting | Cloudflare Pages |
 | Analytics | Cloudflare KV |
 | Font | Helvetica (system) |
@@ -69,62 +70,158 @@ description: "A short description"
 Your markdown content here...
 ```
 
-Files are auto-loaded and sorted by date (newest first). Filename becomes the URL slug (e.g., `004-new-post.md` → `/transmissions/004-new-post`).
+Files are sorted by date (newest first). Filename becomes the URL slug (e.g., `005-new-post.md` → `/transmissions/005-new-post`). **Add a new .md file and run `npm run build`** — a Vite plugin parses them at build time and embeds the data (no code edit needed). Parsing runs in Node only; Cloudflare Workers cannot run gray-matter/marked (they use eval).
 
-## Deployment (Cloudflare Pages)
+---
 
-### 1. Create KV Namespace
+## Deployment to Cloudflare
+
+### Prerequisites
+
+- Cloudflare account (free tier works)
+- Node.js 18+
+- Wrangler CLI (`npx wrangler` or install globally)
+
+### Deployment checklist (order matters)
+
+| Step | Action |
+|------|--------|
+| 1 | `npx wrangler login` |
+| 2 | Deploy cursor-server; note Workers URL |
+| 3 | Create KV namespace; add binding in Pages dashboard |
+| 4 | Create Pages project if needed (`wrangler pages project create archive-site`) |
+| 5 | Set **VITE_WS_URL** and **ANALYTICS_ADMIN_TOKEN** in Pages → Settings → Environment variables |
+| 6 | Build web **with** `VITE_WS_URL` set, then deploy |
+| 7 | Set **ALLOWED_ORIGINS** in cursor-server to include your Pages host(s); redeploy cursor-server |
+| 8 | Verify site, WebSocket, and `/api/analytics` |
+
+---
+
+### Step 1: Login to Cloudflare
 
 ```bash
-# Via Wrangler CLI
-npx wrangler kv:namespace create ANALYTICS
+npx wrangler login
 ```
 
-Or via Cloudflare Dashboard:
-1. Workers & Pages → KV → Create namespace
-2. Copy the namespace ID
+Opens a browser to authenticate.
 
-### 2. Update wrangler.toml
+---
 
-Replace `your-kv-namespace-id-here` with your actual namespace ID:
+### Step 2: Deploy the Cursor Server
 
-```toml
-[[kv_namespaces]]
-binding = "ANALYTICS"
-id = "abc123youractualid"
+Uses Durable Objects for real-time WebSocket connections.
+
+```bash
+cd cursor-server
+npm install
+npm run deploy
 ```
 
-### 3. Set Environment Variables
+Note the URL from the output, e.g. `https://cursor-server.<your-subdomain>.workers.dev`. The WebSocket endpoint is `wss://cursor-server.<your-subdomain>.workers.dev/ws`.
 
-In Cloudflare Pages dashboard:
-- Settings → Environment variables → Production
+---
 
-| Variable | Description |
-|----------|-------------|
-| `VITE_WS_URL` | Your WebSocket server URL (e.g., `wss://ws.yourdomain.com`) |
-| `ANALYTICS_ADMIN_TOKEN` | Secret token for resetting analytics |
+### Step 3: Create KV Namespace and bind to Pages
 
-### 4. Deploy
+Create a KV namespace (e.g. in Dashboard: Workers & Pages → KV → Create namespace). Name it (e.g. `archive-site-analytics`) and copy the **Namespace ID**.
 
-**Option A: Connect GitHub repo**
-1. Cloudflare Pages → Create project → Connect Git
-2. Select repo, set build settings:
-   - Build command: `npm run build`
-   - Build output: `.svelte-kit/cloudflare`
-3. Deploy
+Then bind it to the Pages app:
 
-**Option B: CLI deploy**
+1. Workers & Pages → **archive-site** → **Settings** → **Functions**
+2. **KV namespace bindings** → **Add binding**
+3. Variable name: **ANALYTICS** (must match code)
+4. Select your KV namespace → Save
+
+Optional: set the same namespace ID in `web/wrangler.toml` under `[[kv_namespaces]]` if you use `wrangler pages deploy` so local preview has KV.
+
+---
+
+### Step 4: Create Pages project (first time only)
+
+If the project does not exist yet:
+
 ```bash
 cd web
-npm run build
-npx wrangler pages deploy .svelte-kit/cloudflare
+npx wrangler pages project create archive-site --production-branch=main
 ```
 
-### 5. Configure KV Binding
+Cloudflare will show a URL like `https://archive-site-XXXX.pages.dev` (the exact subdomain is assigned by Cloudflare).
 
-In Pages dashboard:
-- Settings → Functions → KV namespace bindings
-- Add: `ANALYTICS` → your KV namespace
+---
+
+### Step 5: Set Environment Variables (Pages)
+
+In **Cloudflare Dashboard → Workers & Pages → archive-site → Settings → Environment variables** (Production):
+
+| Variable | Type | Value |
+|----------|------|-------|
+| `VITE_WS_URL` | **Plaintext** | `wss://cursor-server.<your-subdomain>.workers.dev/ws` |
+| `ANALYTICS_ADMIN_TOKEN` | **Secret** | A secret string for analytics reset |
+
+`VITE_WS_URL` is baked into the client bundle at **build time**, so you must build with it set (see Step 6).
+
+---
+
+### Step 6: Build and deploy the web app
+
+Build **must** set `VITE_WS_URL` so the client connects to your Worker. Then deploy the SvelteKit output.
+
+```bash
+cd web
+npm install
+VITE_WS_URL=wss://cursor-server.<your-subdomain>.workers.dev/ws npm run build
+npx wrangler pages deploy .svelte-kit/cloudflare --project-name=archive-site
+```
+
+Use your actual Workers URL in `VITE_WS_URL`. After deploy, note your Pages URL (e.g. `https://archive-site-79d.pages.dev` or the deployment alias).
+
+---
+
+### Step 7: Allow your Pages origin on the cursor server
+
+Update `cursor-server/wrangler.toml` so `ALLOWED_ORIGINS` includes your Pages host. The server allows exact origins and any subdomain of a listed host (e.g. deployment URLs like `https://abc123.archive-site-79d.pages.dev`).
+
+```toml
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:4173,https://archive-site-79d.pages.dev"
+```
+
+Add `https://yourcustomdomain.com` if you use a custom domain. Then redeploy:
+
+```bash
+cd cursor-server
+npm run deploy
+```
+
+---
+
+### Step 8: Verify
+
+1. Open your site (e.g. `https://archive-site-79d.pages.dev` or the alias URL).
+2. Open the same URL in another tab or incognito window.
+3. Move the cursor in each tab — you should see both cursors and the viewer count update.
+4. Visit counter and analytics should work; check Network tab for `POST /api/analytics` (no 404).
+
+---
+
+## Custom Domain (Optional)
+
+### For Pages (web app)
+
+1. Pages → archive-site → Custom domains → Add
+2. Enter your domain
+3. Update DNS as instructed
+
+### For Cursor Server
+
+1. Workers → cursor-server → Settings → Triggers
+2. Add custom domain or route
+
+Then update:
+- `cursor-server/wrangler.toml` → `ALLOWED_ORIGINS` with new domain
+- Pages env var `VITE_WS_URL` with new WebSocket URL
+
+---
 
 ## Analytics API
 
@@ -134,30 +231,35 @@ In Pages dashboard:
 |--------|----------|-------------|
 | GET | `/api/analytics` | Get visit count + top referrers |
 | POST | `/api/analytics` | Record a visit (body: `{ referrer?: string }`) |
-| DELETE | `/api/analytics?token=SECRET` | Reset all analytics |
+| DELETE | `/api/analytics` | Reset all analytics (requires auth) |
 
 ### Reset Analytics
 
 ```bash
-curl -X DELETE "https://yoursite.pages.dev/api/analytics" \
+curl -X DELETE "https://archive-site-79d.pages.dev/api/analytics" \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
 ```
 
+Replace the host with your actual Pages URL if different.
+
+---
+
 ## Environment Variables
 
-### Frontend (Cloudflare Pages)
+### Web App (Cloudflare Pages)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `VITE_WS_URL` | `ws://localhost:3001` | WebSocket server URL |
-| `ANALYTICS_ADMIN_TOKEN` | - | Secret for analytics reset (set in CF dashboard) |
+| Variable | Description |
+|----------|-------------|
+| `VITE_WS_URL` | WebSocket server URL; **build-time** (Plaintext). Set when running `npm run build` or in dashboard before a Cloudflare-built deploy. |
+| `ANALYTICS_ADMIN_TOKEN` | Secret for analytics reset (Secret in dashboard). |
 
-### WebSocket Server
+### Cursor Server
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WS_PORT` | `3001` | WebSocket server port |
-| `ALLOWED_ORIGINS` | `http://localhost:5173,...` | Comma-separated allowed origins |
+| Variable | Description |
+|----------|-------------|
+| `ALLOWED_ORIGINS` | Comma-separated allowed origins for CORS |
+
+---
 
 ## Assets
 
@@ -168,27 +270,41 @@ Assets are stored in `web/static/assets/`:
 | `cursor.svg` | Custom cursor |
 | `track.mp3` | Background music |
 
+---
+
 ## Development
 
 ```bash
-# Type checking
+# Type checking (web)
 cd web && npm run check
 
-# Build
+# Type checking (cursor-server)
+cd cursor-server && npm run check
+
+# Build (web)
 cd web && npm run build
 
 # Preview production build
 cd web && npm run preview
 ```
 
+---
+
 ## Cost (Cloudflare Free Tier)
 
 | Resource | Free Limit |
 |----------|------------|
 | Pages requests | 100K/day |
+| Workers requests | 100K/day |
+| Durable Objects requests | 1M/month |
+| Durable Objects duration | 400K GB-sec/month |
 | KV reads | 100K/day |
 | KV writes | 1K/day |
 | KV storage | 1GB |
+
+For a hobby cursor sharing app, you'll likely stay well within free limits.
+
+---
 
 ## Credits
 

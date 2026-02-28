@@ -86,3 +86,6 @@ Canvas Fallback: If the user count exceeds 500, switch from individual div eleme
    \textbf{Frontend:} JavaScript (ES6+), CSS Transforms, WebSocket API.
    \textbf{Backend:} Node.js, uWebSockets.js (for high throughput), or Go/Bun.
    \textbf{DevOps:} A server with high PPS (Packets Per Second) capability and low-latency routing.
+
+7. Deployment
+   This project is deployed on Cloudflare: Workers + Durable Objects (cursor server) and Pages (SvelteKit frontend). For step-by-step deployment (login, KV, env vars, build with VITE_WS_URL, ALLOWED_ORIGINS), see the main README.md "Deployment to Cloudflare" section.

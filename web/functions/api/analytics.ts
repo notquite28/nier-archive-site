@@ -8,6 +8,26 @@ interface ReferrerData {
 }
 
 const REFERRER_TTL = 60 * 60 * 24 * 30;
+const RATE_LIMIT_TTL = 60;
+const RATE_LIMIT_MAX = 10;
+
+function getClientIP(request: Request): string {
+    return request.headers.get('CF-Connecting-IP') || 
+           request.headers.get('X-Forwarded-For')?.split(',')[0]?.trim() || 
+           'unknown';
+}
+
+async function checkRateLimit(env: Env, ip: string): Promise<boolean> {
+    const key = `ratelimit:${ip}`;
+    const current = parseInt(await env.ANALYTICS.get(key) || '0');
+    
+    if (current >= RATE_LIMIT_MAX) {
+        return false;
+    }
+    
+    await env.ANALYTICS.put(key, String(current + 1), { expirationTtl: RATE_LIMIT_TTL });
+    return true;
+}
 
 function getTodayKey(): string {
     return `referrers:${new Date().toISOString().split('T')[0]}`;
@@ -21,6 +41,15 @@ function extractDomain(referrer: string | undefined): string | null {
     } catch {
         return null;
     }
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) {
+        result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return result === 0;
 }
 
 export async function onRequestGet(context: { env: Env }): Promise<Response> {
@@ -67,6 +96,14 @@ export async function onRequestGet(context: { env: Env }): Promise<Response> {
 export async function onRequestPost(context: { env: Env; request: Request }): Promise<Response> {
     const { env, request } = context;
     
+    const ip = getClientIP(request);
+    if (!(await checkRateLimit(env, ip))) {
+        return new Response(JSON.stringify({ error: 'Too many requests' }), {
+            status: 429,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+    
     try {
         const body = await request.json().catch(() => ({}));
         const referrer = extractDomain(body.referrer as string | undefined);
@@ -98,9 +135,10 @@ export async function onRequestDelete(context: { env: Env; request: Request }): 
     const { env, request } = context;
     
     const authHeader = request.headers.get('Authorization');
-    const token = authHeader?.replace('Bearer ', '');
+    const token = authHeader?.replace('Bearer ', '') || '';
+    const expectedToken = env.ANALYTICS_ADMIN_TOKEN || '';
     
-    if (!env.ANALYTICS_ADMIN_TOKEN || token !== env.ANALYTICS_ADMIN_TOKEN) {
+    if (!expectedToken || !timingSafeEqual(token, expectedToken)) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }

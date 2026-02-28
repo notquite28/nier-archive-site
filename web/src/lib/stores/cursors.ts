@@ -12,23 +12,20 @@ function createCursorStore() {
     return {
         subscribe,
         addCursor: (cursor: RemoteCursor) => update(map => {
-            const newMap = new Map(map);
-            newMap.set(cursor.id, cursor);
-            return newMap;
+            map.set(cursor.id, cursor);
+            return map;
         }),
         updateCursor: (id: number, x: number, y: number) => update(map => {
             if (map.has(id)) {
-                const newMap = new Map(map);
-                newMap.set(id, { id, x, y });
-                return newMap;
+                map.set(id, { id, x, y });
+                return map;
             }
             return map;
         }),
         removeCursor: (id: number) => update(map => {
             if (map.has(id)) {
-                const newMap = new Map(map);
-                newMap.delete(id);
-                return newMap;
+                map.delete(id);
+                return map;
             }
             return map;
         }),

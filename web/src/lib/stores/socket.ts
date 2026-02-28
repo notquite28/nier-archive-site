@@ -42,7 +42,6 @@ function createSocketStore() {
         socket.onopen = () => {
             reconnectAttempts = 0;
             set('connected');
-            console.log('[WS] Connected to', url);
         };
 
         socket.onclose = (event) => {

@@ -204,6 +204,35 @@ npm run deploy
 
 ---
 
+## Auto deploy from Git (Cloudflare Pages)
+
+To have Cloudflare build and deploy on every push to GitHub:
+
+1. **Cloudflare Dashboard** → **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. **Authorize GitHub** (if needed), then choose repo **notquite28/nier-archive-site**, branch **main**.
+3. **Configure build:**
+   - **Project name:** `archive-site` (to keep the same Pages URL; or any name and update env/ALLOWED_ORIGINS later).
+   - **Root directory:** `web` (so the build runs from the SvelteKit app).
+   - **Framework preset:** None.
+   - **Build command:** `npm ci && npm run build`
+   - **Build output directory:** `.svelte-kit/cloudflare`
+   - **Node.js version:** 18 or 20 (in Environment variables or Settings).
+4. **Environment variables:** If the Dashboard says "Environment variables are being managed through wrangler.toml", then **VITE_WS_URL** must be set in `web/wrangler.toml` under `[vars]` (replace `your-subdomain` with your Workers subdomain). Only **Secrets** (e.g. **ANALYTICS_ADMIN_TOKEN**) can be added in the Dashboard in that case. Otherwise add both in the Dashboard.
+5. **Save** and deploy. Every push to `main` will trigger a new deployment.
+
+**Note:** The **cursor-server** Worker is not built from this repo by Git; deploy it with `cd cursor-server && npm run deploy` when you change it. KV binding is set in **Settings → Functions**.
+
+---
+
+## Local development (WebSocket)
+
+The app falls back to `ws://localhost:8787/ws` when **VITE_WS_URL** is not set. Either:
+
+- **Run the cursor-server locally:** `cd cursor-server && npm run dev` (serves on 8787), then run the web app; or  
+- **Use production WebSocket:** copy `web/.env.example` to `web/.env` and set `VITE_WS_URL` to your deployed Worker URL.
+
+---
+
 ## Custom Domain (Optional)
 
 ### For Pages (web app)

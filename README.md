@@ -189,3 +189,11 @@ cd web && npm run preview
 | KV reads | 100K/day |
 | KV writes | 1K/day |
 | KV storage | 1GB |
+
+## Credits
+
+Design and functionality inspired by:
+
+- **[YoRHa Theme](https://metakirby5.github.io/yorha/)** by metakirby5 - CSS styling, color palette, and UI components
+- **[NieR List Template](https://hoanganhdinhngoc.github.io/cdn/)** by HoangAnhDinhNgoc - Accordion navigation pattern
+- **[Daniele Avolio](https://www.danieleavolio.it/)** - Additional design inspiration

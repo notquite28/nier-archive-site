@@ -47,10 +47,10 @@
     }
 
     const sections: Section[] = [
-        { id: 'whoami', title: 'Unit Profile' },
-        { id: 'projects', title: 'Data Fragments' },
-        { id: 'transmissions', title: 'Transmissions' },
-        { id: 'network', title: 'Network' }
+        { id: 'whoami', title: 'About' },
+        { id: 'projects', title: 'Components' },
+        { id: 'transmissions', title: 'Documentation' },
+        { id: 'network', title: 'Source' }
     ];
 
     let openSection = $state<string | null>('whoami');
@@ -66,7 +66,7 @@
 
 <svelte:head>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <title>quiet</title>
+    <title>nier-archive-site // proof of concept</title>
 </svelte:head>
 
 <div class="page">
@@ -79,10 +79,12 @@
     <main class="content">
         <header class="site-header">
             <div class="logo-area">
-                <div class="logo-placeholder">q</div>
+                <div class="logo-placeholder">
+                    <img src="/assets/yorha.svg" alt="YoRHa Logo" class="logo" />
+                </div>
             </div>
-            <h1 class="site-title">quiet</h1>
-            <p class="site-subtitle">neet developer/artist/musician</p>
+            <h1 class="site-title">nier-archive-site</h1>
+            <p class="site-subtitle">a proof of concept inspired by nier automata</p>
         </header>
 
         <div class="sections-container">
@@ -115,7 +117,7 @@
         </div>
 
         <footer class="site-footer">
-            <p>The cursors you see are other units exploring alongside you.</p>
+            <p>The cursors you see are other units exploring alongside you. Inspired by Nier Automata's Ending E.</p>
         </footer>
     </main>
 </div>
@@ -155,9 +157,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2.5rem;
-        color: #bab5a1;
         box-shadow: 0.3rem 0.3rem 0 #bab5a1;
+        padding: 0.75rem;
+    }
+
+    .logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: invert(30%) sepia(10%) saturate(300%) hue-rotate(30deg);
     }
 
     .site-title {
@@ -271,7 +279,7 @@
         .logo-placeholder {
             width: 60px;
             height: 60px;
-            font-size: 2rem;
+            padding: 0.5rem;
         }
 
         .section-header {

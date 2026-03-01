@@ -5,8 +5,5 @@ export interface Link {
 }
 
 export const links: Link[] = [
-    { name: 'GitHub', url: 'https://github.com/notquitethereyet', icon: '◈' },
-    { name: 'Twitter', url: 'https://twitter.com/notquiteartyet', icon: '◇' },
-    { name: 'Spotify', url: 'https://open.spotify.com/user/5p320nqqyaj9yt21i8igkm41q', icon: '♪' },
-    { name: 'Medium', url: 'https://medium.com/@notquitethereyet_', icon: '▣' }
+    { name: 'Source Code', url: 'https://github.com/notquite28/nier-archive-site', icon: '◈' }
 ];

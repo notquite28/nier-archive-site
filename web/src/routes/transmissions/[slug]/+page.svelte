@@ -41,7 +41,7 @@
 </script>
 
 <svelte:head>
-    <title>{transmission?.title ?? 'Loading...'} - quiet</title>
+    <title>{transmission?.title ?? 'Loading...'} - nier-archive-site</title>
 </svelte:head>
 
 {#if loading}

@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-    <title>{status} - quiet</title>
+    <title>{status} - nier-archive-site</title>
 </svelte:head>
 
 <div class="error-page">

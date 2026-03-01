@@ -23,7 +23,7 @@
 </script>
 
 <div class="section projects">
-    <p class="intro">Recovered project data from the archive.</p>
+    <p class="intro">Technical components of this proof of concept.</p>
     
     <div class="project-list">
         {#each projectList as project, i}

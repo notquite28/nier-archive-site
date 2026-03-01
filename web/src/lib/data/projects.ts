@@ -8,24 +8,17 @@ export interface Project {
 
 export const projects: Project[] = [
     {
-        name: 'Pixel Room',
-        description: 'Real-time cursor sharing with immersive pixel art aesthetics. See other visitors exploring alongside you.',
-        url: 'https://github.com/yourname/pixel-room',
+        name: 'Shared Cursors',
+        description: 'Real-time cursor sharing inspired by Nier Automata\'s Ending E. See other visitors exploring alongside you.',
+        url: 'https://github.com/notquite28/nier-archive-site',
         tags: ['SvelteKit', 'WebSocket', 'Cloudflare'],
         status: 'live'
     },
     {
-        name: 'Project Alpha',
-        description: 'A creative experiment in web immersion. Work in progress.',
-        url: '',
-        tags: ['TypeScript', 'Canvas', 'WebGL'],
-        status: 'wip'
-    },
-    {
-        name: 'Project Beta',
-        description: 'Archived project from the early archives.',
-        url: '',
-        tags: ['React', 'Node.js', 'PostgreSQL'],
-        status: 'archived'
+        name: 'WebSocket Server',
+        description: 'Lightweight real-time relay for cursor synchronization.',
+        url: 'https://github.com/notquite28/nier-archive-site',
+        tags: ['TypeScript', 'Cloudflare Workers'],
+        status: 'live'
     }
 ];

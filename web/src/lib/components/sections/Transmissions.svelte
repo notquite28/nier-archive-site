@@ -12,9 +12,9 @@
             }
         } catch (e) {
             transmissions = [
-                { slug: '001-archive-initialized', title: 'Archive Initialized', date: '2024.02.27' },
-                { slug: '002-immersive-spaces', title: 'Building Immersive Spaces', date: '2024.02.20' },
-                { slug: '003-nier-inspiration', title: 'The NieR Inspiration', date: '2024.02.15' }
+                { slug: '001-architecture', title: 'System Architecture', date: '2024-11-15' },
+                { slug: '002-websocket', title: 'WebSocket Implementation', date: '2024-11-17' },
+                { slug: '003-inspiration', title: 'Inspiration: Ending E', date: '2024-11-24' }
             ];
         }
     });
@@ -25,7 +25,7 @@
 </script>
 
 <div class="section transmissions">
-    <p class="intro">Log entries received from the network.</p>
+    <p class="intro">Technical documentation and insights.</p>
     
     <div class="transmission-list">
         {#each transmissions as tx (tx.slug)}

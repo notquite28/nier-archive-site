@@ -5,7 +5,7 @@
 </script>
 
 <div class="section network">
-    <p class="intro">External connections and contact protocols.</p>
+    <p class="intro">Access the source code repository.</p>
     
     <div class="link-grid">
         {#each linkList as link}
@@ -18,8 +18,8 @@
     </div>
     
     <blockquote class="contact">
-        <p>To establish direct contact:</p>
-        <cite>judy2077 [at] protonmail [dot] com</cite>
+        <p>Built with care. Open source.</p>
+        <cite>github.com/notquite28/nier-archive-site</cite>
     </blockquote>
 </div>
 
